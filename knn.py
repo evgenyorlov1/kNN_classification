@@ -42,8 +42,8 @@ class NearestNeighbors:
             print neighbor
 
 
-def get_accuracy():
-    pass
+def get_accuracy(count, T):
+    return 100*count/T
 
 
 def load(filename):
@@ -54,12 +54,17 @@ def load(filename):
 
 
 def knn(t_data, c_data, k):
+    count = 0
     for cpoint in c_data:
         nn = NearestNeighbors(cpoint, k)
         [nn.append(tpoint) for tpoint in t_data]
         nn.print_closest_neighbors()
         print 'Point class: {}'.format(nn.get_class())
         print '---------------'
+        if cpoint[-1] == nn.get_class():
+            count += 1
+    accuracy = get_accuracy(count, len(c_data))
+    print 'Accuracy: {0}'.format(accuracy)
 
 
 def parse_options():
@@ -90,6 +95,3 @@ options = parse_options()
 t_data = load(options.tfile)  # training data
 c_data = load(options.cfile)  # classifying data
 knn(t_data, c_data, options.neighbors)
-
-
-get_accuracy()
